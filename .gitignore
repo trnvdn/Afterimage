@@ -1,1 +1,52 @@
+# Local AI assistant instructions (kept out of the repo intentionally)
 CLAUDE.md
+
+# ---------- Secrets ----------
+.env
+.env.*
+!.env.example
+*.pfx
+appsettings.Development.json
+appsettings.*.Local.json
+
+# ---------- .NET ----------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+.vs/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+artifacts/
+
+# ---------- Python (afterimage-ai) ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+.python-version
+
+# ---------- Docker / data volumes ----------
+# local bind-mounted data for pg / minio / qdrant, if used
+.data/
+docker-data/
+
+# ---------- IDE / editors ----------
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---------- Logs ----------
+*.log
+logs/
