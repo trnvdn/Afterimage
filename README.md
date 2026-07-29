@@ -14,7 +14,7 @@ Upload a photo and find it later by describing it — "dog on a beach",
 upload → MinIO (raw bucket) + Postgres row (Uploaded)
        → publish photo.uploaded to RabbitMQ
        → Worker: EXIF → thumbnail → afterimage-ai /embed-image
-       → vector into Qdrant → status Ready → SignalR notifies the client
+       → vector into Qdrant → status Processed → SignalR notifies the client
 ```
 
 On failure a photo is marked `Failed` and retried via a dead-letter queue.
@@ -23,7 +23,7 @@ On failure a photo is marked `Failed` and retried via a dead-letter queue.
 
 | Area | Technology |
 |---|---|
-| API | ASP.NET Core 8, EF Core, JWT (ASP.NET Identity), SignalR |
+| API | ASP.NET Core 9, EF Core, JWT (ASP.NET Identity), SignalR |
 | Worker | .NET Worker Service, RabbitMQ consumer |
 | AI | Python, FastAPI, CLIP embeddings, Ollama |
 | Storage | PostgreSQL (metadata), MinIO (files, S3-compatible), Qdrant (vectors) |
@@ -37,7 +37,8 @@ src/                     application services
   Afterimage.Api/        Web API
   Afterimage.Worker/     background processing
   afterimage-ai/         Python, ML (embeddings)
-  Afterimage.Shared/     shared contracts
+  Afterimage.Domain/     persistence model + data access (shared by Api & Worker)
+  Afterimage.Shared/     cross-service message contracts
 deploy/                  docker-compose, Helm charts, k8s manifests
 tests/                   unit tests + evals/ (RAG evaluation)
 docs/adr/                Architecture Decision Records

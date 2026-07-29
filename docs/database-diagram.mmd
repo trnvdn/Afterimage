@@ -1,0 +1,15 @@
+erDiagram
+    photos {
+        uuid id PK "app-generated GUID (see ADR-0002)"
+        uuid owner_id "owner; FK to users added later"
+        text file_name "original client file name"
+        text content_type "MIME type, e.g. image/jpeg"
+        bigint size_bytes "original object size"
+        text original_storage_key "MinIO path to original"
+        text thumbnail_storage_key "MinIO path to thumbnail (nullable)"
+        text lifecycle_state "uploaded, processed, failed (string-mapped enum)"
+        text failure_reason "processing error details (nullable)"
+        timestamptz created_at "upload timestamp"
+        timestamptz updated_at "state/metadata update timestamp"
+        jsonb metadata "discovered EXIF/capture metadata (nullable)"
+    }
