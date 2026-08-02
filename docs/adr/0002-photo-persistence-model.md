@@ -31,9 +31,11 @@ dependency. (This drives the target framework to .NET 9; update the stack notes
 in README / CLAUDE.md accordingly.)
 
 ### 2. Owner reference
-`owner_id` is a plain `GUID` for now — the user identifier is also a GUID.
-No foreign key to `users` yet (the table does not exist). The FK is added once
-auth lands (#4).
+`owner_id` is a plain `GUID` — the user identifier (see ADR-0006). It is a
+cross-service *logical* reference with **no database foreign key**: auth is a
+separate service with its own database ([ADR-0006](0006-identity.md)), so a FK
+cannot span the boundary. Integrity comes from the token that carries the owner
+id, and (later) a `user.deleted` event.
 
 ### 3. Implications for external systems
 - **MinIO (S3):** the object path pattern is `{owner_id}/{id}/original` and
@@ -79,7 +81,8 @@ Source of truth: [`docs/database-diagram.mmd`](../database-diagram.mmd)
 ## Consequences
 - **Eventual consistency:** clients do not get full metadata immediately on
   upload; the client polls or relies on a fallback state.
-- Revisit later to add the real FK from `owner_id` to `users`.
+- `owner_id` has no database FK — auth is a separate service ([ADR-0006](0006-identity.md)).
+  Integrity is enforced via the signed token and a future `user.deleted` event.
 
 ## Alternatives considered
 - **Validate photos via business logic in the API** — overengineering; heavy

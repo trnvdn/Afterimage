@@ -23,7 +23,8 @@ On failure a photo is marked `Failed` and retried via a dead-letter queue.
 
 | Area | Technology |
 |---|---|
-| API | ASP.NET Core 9, EF Core, JWT (ASP.NET Identity), SignalR |
+| API | ASP.NET Core 9, EF Core, JWT bearer validation, SignalR |
+| Identity | Separate auth service — ASP.NET Identity, JWT (RS256 / JWKS), own database |
 | Worker | .NET Worker Service, RabbitMQ consumer |
 | AI | Python, FastAPI, CLIP embeddings, Ollama |
 | Storage | PostgreSQL (metadata), MinIO (files, S3-compatible), Qdrant (vectors) |
@@ -35,6 +36,7 @@ On failure a photo is marked `Failed` and retried via a dead-letter queue.
 ```
 src/                     application services
   Afterimage.Api/        Web API
+  Afterimage.Identity/   authentication service (own database, JWKS)
   Afterimage.Worker/     background processing
   afterimage-ai/         Python, ML (embeddings)
   Afterimage.Domain/     persistence model + data access (shared by Api & Worker)
